@@ -192,3 +192,4 @@ EOF
 fi
 
 echo "$dir"
+cd "$dir"
