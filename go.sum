@@ -1,0 +1,6 @@
+codeberg.org/derat/advent-of-code v0.0.0-20241204114759-fea142f361d1 h1:Qk7mR19R//AYUQITD0NcTaGfs5jZA5l4eW7RVyaBur8=
+codeberg.org/derat/advent-of-code v0.0.0-20241204114759-fea142f361d1/go.mod h1:rbG4ftRvPE+oD0WTU7JRgpi/fXtcQ4bN8FZAvpqbTBI=
+golang.org/x/exp v0.0.0-20220328175248-053ad81199eb h1:pC9Okm6BVmxEw76PUu0XUbOTQ92JX11hfvqTjAV3qxM=
+golang.org/x/exp v0.0.0-20220328175248-053ad81199eb/go.mod h1:lgLbSvA5ygNOMpwM/9anMpWVlVJ7Z+cHWq/eFuinpGE=
+golang.org/x/exp v0.0.0-20241204233417-43b7b7cde48d h1:0olWaB5pg3+oychR51GUVCEsGkeCU/2JxjBgIo4f3M0=
+golang.org/x/exp v0.0.0-20241204233417-43b7b7cde48d/go.mod h1:qj5a5QZpwLU2NLQudwIN5koi3beDhSAlJwa67PuM98c=

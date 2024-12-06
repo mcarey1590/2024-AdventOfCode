@@ -6,18 +6,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"codeberg.org/derat/advent-of-code/lib"
 )
 
 func main() {
-	// Read in the input file
-	lines, err := utils.ReadInput("Day_1/input.txt")
-
-	if err == nil {
-		solvePuzzle(lines)
-	} else {
-		fmt.Println("Error reading input file")
-		panic(err)
-	}
+	lines := lib.InputLines("2024/1")
+	solvePuzzle(lines)
 }
 
 func solvePuzzle(lines []string) {
