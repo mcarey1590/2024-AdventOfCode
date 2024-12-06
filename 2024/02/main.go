@@ -14,77 +14,74 @@ func main() {
 func solvePuzzle(lines []string) {
 	reportsData := parseLines(lines)
 
+	lib.Assert(len(reportsData) == 1000)
+
 	// Part 1
-	fmt.Println("Part 1: ", part1(reportsData))
+	safeReports, unsafeReports := part1(reportsData)
+	part1Answer := len(safeReports)
+	fmt.Println("Part 1: ", part1Answer)
 
 	// Part 2
-	fmt.Println("Part 2: ", part2(reportsData))
+	safeWithTolerance, unsafeWithTolerance := part2(unsafeReports)
+	part2Answer := part1Answer + len(safeWithTolerance)
+	fmt.Println("Part 2: ", part2Answer)
+
+	lib.Assert(part2Answer+len(unsafeWithTolerance) == 1000)
 }
 
 func parseLines(lines []string) [][]int {
 	var nums [][]int
 	for _, line := range lines {
-		nums = append(nums, lib.ExtractInts(line))
+		lineNums := lib.ExtractInts(line)
+		nums = append(nums, lineNums)
 	}
 
 	return nums
 }
 
-func part1(reportsData [][]int) int {
-	return determineSafeReports(reportsData, 0)
+func part1(reportsData [][]int) ([][]int, [][]int) {
+	return conductSafetyTest(reportsData, false)
 }
 
-func part2(reportsData [][]int) int {
-	return determineSafeReports(reportsData, 1)
+func part2(unsafeReports [][]int) ([][]int, [][]int) {
+	return conductSafetyTest(unsafeReports, true)
 }
 
-func determineSafeReports(reportsData [][]int, tolerance int) int {
-	safeReports := 0
+func conductSafetyTest(reportsData [][]int, checkWithTolerance bool) ([][]int, [][]int) {
+	safeReports := make([][]int, 0)
+	unsafeReports := make([][]int, 0)
 
 	for _, report := range reportsData {
-		safeReport := determineUnsafeLevels(report, tolerance)
+		safeReport := isReportSafe(report)
+
+		if !safeReport && checkWithTolerance {
+			for i := 0; i < len(report); i++ {
+				if isReportSafe(utils.RemoveIndex(report, i)) {
+					safeReport = true
+					break
+				}
+			}
+		}
 
 		if safeReport {
-			safeReports++
+			safeReports = append(safeReports, report)
 		} else {
-			//fmt.Println("Retry without first level")
-			safeReport = determineUnsafeLevels(report[1:], tolerance-1)
-
-			if safeReport {
-				safeReports++
-			}
+			unsafeReports = append(unsafeReports, report)
 		}
 	}
 
-	return safeReports
+	return safeReports, unsafeReports
 }
 
-func determineUnsafeLevels(report []int, tolerance int) bool {
-	unsafeLevels := 0
+func isReportSafe(report []int) bool {
 	prevLevel := report[0]
 	dir := 0
+
 	for _, nextLevel := range report[1:] {
-		if unsafeLevels > tolerance {
-			break
-		}
+		nextLevelIsSafe, currDir := isNextLevelSafe(prevLevel, nextLevel, dir)
 
-		levelDiff := nextLevel - prevLevel
-
-		if levelDiff == 0 || utils.Abs(levelDiff) > 3 {
-			unsafeLevels++
-			continue
-		}
-
-		currDir := 0
-		if levelDiff > 0 {
-			currDir = 1
-		} else {
-			currDir = -1
-		}
-
-		if dir != 0 && currDir != dir {
-			unsafeLevels++
-			continue
+		if !nextLevelIsSafe {
+			return false
 		}
 
 		if dir == 0 {
@@ -93,11 +90,27 @@ func determineUnsafeLevels(report []int, tolerance int) bool {
 
 		prevLevel = nextLevel
 	}
-	safe := unsafeLevels <= tolerance
 
-	//if !safe {
-	//	fmt.Println(report)
-	//}
+	return true
+}
 
-	return safe
+func isNextLevelSafe(prevLevel int, nextLevel int, dir int) (bool, int) {
+	levelDiff := nextLevel - prevLevel
+
+	currDir := 0
+	if levelDiff > 0 {
+		currDir = 1
+	} else {
+		currDir = -1
+	}
+
+	if dir != 0 && currDir != dir {
+		return false, dir
+	}
+
+	if levelDiff == 0 || utils.Abs(levelDiff) > 3 {
+		return false, dir
+	}
+
+	return true, currDir
 }
