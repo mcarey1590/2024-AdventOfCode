@@ -25,7 +25,7 @@ if ! type advent > /dev/null; then
   cat << EOF >> ~/.zshrc
 
 # AdventOfCode
-advent() {
+aoc() {
   case "\$1" in
     -h|--help|check|checkall|help|input|run|save|stdin|web)
       $PWD/advent.sh "\$@"
